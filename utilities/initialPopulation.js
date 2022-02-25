@@ -6,6 +6,7 @@ const initialPopulation = (populationSizeParam) => {
     /*
     Individual Representation
     Every individual is a list of genotype
+    Background
     #0: fillColor R value (0-255)
     #1: fillColor G value (0-255)
     #2: fillColor B value (0-255)
@@ -25,6 +26,7 @@ const initialPopulation = (populationSizeParam) => {
         individual.push(getRandomInt(256));
         individual.push(getRandomInt(256));
         individual.push(getRandomInt(70) + 1);
+        individual.push(getRandomInt(2));
         populationList.push(individual);
     }
     return populationList;

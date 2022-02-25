@@ -11,7 +11,8 @@ import {
 import React, {useState, useEffect, useRef} from 'react'
 import axios from 'axios';
 
-export default function Home() {
+export default function Home({ apiUrl }) {
+  // Sample usage: axios.post(`${apiUrl}/generate-design`)
 
   const [image, setImage] = useState(null)
   const canvas1 = useRef(null)
@@ -186,4 +187,13 @@ export default function Home() {
     </Grid>
     </>
   )
+}
+
+export async function getStaticProps() {
+  const apiUrl = process.env.API_URL;
+  return {
+      props: {
+          apiUrl,
+      },
+  };
 }
