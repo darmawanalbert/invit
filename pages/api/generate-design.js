@@ -10,7 +10,7 @@ export default (req, res) => {
         // const dateString = req.body.dateString;
         // const timeString = req.body.timeString;
 
-        const populationList = initialPopulation(1);
+        const populationList = initialPopulation(3);
         const bgBase64List = [];
         for (let i = 0; i < populationList.length; i++) {
             const individual = populationList[i];
