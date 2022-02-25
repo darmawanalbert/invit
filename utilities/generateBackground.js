@@ -56,30 +56,41 @@ const particlesScene = (scene, fillColor, strokeColor, tileSize ) => {
 
 }
 
+const initializeCanvas = () => {
+    const WIDTH = 1080;
+    const HEIGHT = 1560;
 
+    const canvas = createCanvas(WIDTH, HEIGHT);
+    Two.Utils.shim(canvas, Image);
+
+    const two = new Two({
+        width: WIDTH,
+        height: HEIGHT,
+        domElement: canvas
+    });
+
+    return {
+        scene: two,
+        canvas: canvas,
+    };
+
+}
 // Parameter : Tile Size [1-70] * 4 pixels
 //             Stroke Color RGB(0-255,0-255,0-255)
 //             Fill Color RGB(0-255,0-255,0-255)
 //             bgType (0 for tile, 1 for polka dot)
-const generateBackground = (fillColor, strokeColor, tileSize, bgType) => {
-    
+const generateBackground = (canvasObject, fillColor, strokeColor, tileSize, bgType) => {
+
     bgType = bgType || 0
-    const WIDTH = 1080;
-    const HEIGHT = 1560;
+
+    const {scene, canvas} = canvasObject
+    scene.clear();
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 
     const scenePopulator = {
         0:tiledSquareScene,
         1:particlesScene
     }
-
-    const canvas = createCanvas(WIDTH, HEIGHT);
-    Two.Utils.shim(canvas, Image);
-
-    const scene = new Two({
-        width: WIDTH,
-        height: HEIGHT,
-        domElement: canvas
-    });
 
     scenePopulator[bgType](scene, fillColor,strokeColor, tileSize, bgType);
 
@@ -91,6 +102,4 @@ const generateBackground = (fillColor, strokeColor, tileSize, bgType) => {
 
 }
 
-
-
-export default generateBackground
+export {initializeCanvas, generateBackground}
