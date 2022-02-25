@@ -18,8 +18,6 @@ with open("env.json", "r") as envfile:
 account_sid = twilio_creds["cakraocha"]["accountSid"]
 api_key = twilio_creds["cakraocha"]["apiKey"]
 api_secret = twilio_creds["cakraocha"]["apiSecret"]
-# account_sid = "AC66f01d289767252436f377e1af928b34"
-# auth_token = "54a9080e5e349b2594a8545327630ffa"
 
 twilio_client = Client(account_sid, api_key, api_secret)
 # twilio_client = Client(account_sid, auth_token)
