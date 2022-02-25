@@ -1,3 +1,5 @@
+import * as admin from 'firebase-admin';
+
 import initialPopulation from '../../utilities/initialPopulation';
 import {initializeCanvas, generateBackground} from '../../utilities/generateBackground';
 import rgbToHex from '../../utilities/rgbToHex';
@@ -20,6 +22,22 @@ export default (req, res) => {
             }
             invitationList.push(invitationObject);
         }
+
+        // Initialize Firebase Admin instance
+        const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+        console.log(serviceAccount);
+        console.log(process.env.FIREBASE_DATABASE_URL);
+        if (!admin.apps.length) {
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount),
+                databaseUrl: process.env.FIREBASE_DATABASE_URL,
+            });
+        } else {
+            admin.app();
+        }
+
+        // Initialize connection to Firebase Realtime Database
+        // const db = admin.database();
 
         res.status(200).json({ invitationList: invitationList });
     } else {
