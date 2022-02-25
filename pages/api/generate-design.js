@@ -4,7 +4,7 @@ import initialPopulation from '../../utilities/initialPopulation';
 import {initializeCanvas, generateBackground} from '../../utilities/generateBackground';
 import rgbToHex from '../../utilities/rgbToHex';
 
-export default (req, res) => {
+export default async (req, res) => {
     if (req.method === 'POST') {
         const sessionId = req.body.sessionId;
         const populationList = initialPopulation(10);
@@ -25,19 +25,23 @@ export default (req, res) => {
 
         // Initialize Firebase Admin instance
         const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-        console.log(serviceAccount);
-        console.log(process.env.FIREBASE_DATABASE_URL);
         if (!admin.apps.length) {
             admin.initializeApp({
                 credential: admin.credential.cert(serviceAccount),
-                databaseUrl: process.env.FIREBASE_DATABASE_URL,
             });
         } else {
             admin.app();
         }
 
         // Initialize connection to Firebase Realtime Database
-        // const db = admin.database();
+        const db = admin.firestore();
+        const sampleRef = db.collection('invitations').doc('first-sample');
+        const doc = await sampleRef.get();
+        if (!doc.exists) {
+            console.log("The document doesn't exist1");
+        } else {
+            console.log(doc.data());
+        }
 
         res.status(200).json({ invitationList: invitationList });
     } else {
