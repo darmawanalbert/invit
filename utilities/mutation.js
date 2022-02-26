@@ -48,20 +48,21 @@ const mutation = (individual, intentParam) => {
             individual[11] = mutationValue;
         }
     } else {
-        // Perform single-point mutation
-        const randomVar = Math.random();
-        if (randomVar < mutationProbability) {
-            const individualSize = individual.length;
-            const mutationPoint = getRandomInt(individualSize);
-            let mutationValue = getRandomInt(256);
-            if (mutationPoint === 6) {
-                mutationValue = getRandomInt(70) + 1;
-            } else if (mutationPoint === 7) {
-                mutationValue = getRandomInt(4);
-            } else if (mutationPoint === 11) {
-                mutationValue = getRandomInt(37) + 12;
+        // Perform mutation on all points, each of them adhering to the mutationProbability value
+        const individualSize = individual.length;
+        for (let i = 0; i < individualSize; i++) {
+            const randomVar = Math.random();
+            if (randomVar < mutationProbability) {
+                let mutationValue = getRandomInt(256);
+                if (i === 6) {
+                    mutationValue = getRandomInt(70) + 1;
+                } else if (i === 7) {
+                    mutationValue = getRandomInt(4);
+                } else if (i === 11) {
+                    mutationValue = getRandomInt(37) + 12;
+                }
+                individual[i] = mutationValue;
             }
-            individual[mutationPoint] = mutationValue;
         }
     }
     return individual;
