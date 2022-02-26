@@ -4,7 +4,7 @@ from pydantic import BaseModel, HttpUrl
 
 import requests
 
-import os
+import os, uuid
 
 app = FastAPI(
     title="ALign Twilio",
@@ -27,13 +27,12 @@ auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
 async def root() -> dict:
     return {"msg": "Welcome to ALign Twilio API"}
 
-@api_router.post("/invite", status_code=200, response_model=Invitation)
-async def invite(request: Request) -> dict:
-    req = await request.json()
-    phone = req["num"]
-    inviter = req["inviter"]
-    invitee = req["invitee"]
-    invitation_url = req["invitation_url"]
+@api_router.post("/invite", status_code=200)
+async def invite(request: Invitation) -> dict:
+    phone = request.num
+    inviter = request.inviter
+    invitee = request.invitee
+    invitation_url = request.invitation_url
     body = f"Hi {invitee},\nYou are invited to our wedding, {inviter}. Please see {invitation_url} to see the invitation. :)"
     url = "https://api.twilio.com/2010-04-01/Accounts/AC66f01d289767252436f377e1af928b34/Messages.json"
     params = {
@@ -46,6 +45,20 @@ async def invite(request: Request) -> dict:
 
     return {"msg": msg.json()}
 
+@api_router.post("/collaborate", status_code=200)
+async def collab(request: Request) -> dict:
+    req = await request.json()
+    room_name = req["room_name"] + "-" + str(uuid.uuid4())[:4]
+    url_post = "https://video.twilio.com/v1/Rooms"
+    create_room_params = {
+        "UniqueName": room_name,
+        "Type": "go"
+    }
+    requests.post(url=url_post, data=create_room_params, auth=(account_sid, auth_token))
+    url_get = f"https://video.twilio.com/v1/Rooms/{room_name}"
+    room = requests.get(url=url_get, auth=(account_sid, auth_token))
+
+    return {"room": room.json()}
 
 app.include_router(api_router)
 
