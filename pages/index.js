@@ -138,7 +138,7 @@ export default function Home({ apiUrl }) {
                 partnerTwo={partnerTwo}
                 date={date}
                 place={place}
-                boxIndex={String(index)}
+                apiUrl={String(apiUrl)}
               />
             </Center>
           </Box>
