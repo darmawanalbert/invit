@@ -234,9 +234,9 @@ export default function Home({ apiUrl }) {
 
   return (
     <>
-    <Flex as="header" position="fixed" w="100%" bg={'white'} border={'1px solid #CCC'}>
-      <Box p='4'>
-        Alternative Design
+    <Flex as="header" position="fixed" w="100%" bg={'#3a668c'} border={'1px solid #CCC'}>
+      <Box p='4' color={'white'} fontSize={'24px'}>
+        <b>Alternative Design</b>
       </Box>
       <Spacer />
       <Box p='4' >
@@ -252,8 +252,8 @@ export default function Home({ apiUrl }) {
       gap={4}
     >
       <GridItem colSpan={1} border={'1px solid #CCC'} >
-        <Box padding={'10px'}>
-          Detail Information
+        <Box padding={'10px'} fontSize={'18px'}>
+         <b>Detail Information</b>
         </Box>
         <Box padding={'10px'}>
           <Input placeholder='Partner One' value={partnerOne} onChange={(e) => setPartnerOne(e.currentTarget.value) } />
@@ -264,10 +264,10 @@ export default function Home({ apiUrl }) {
         <Box padding={'10px'}>
           <Textarea placeholder='Tell your story' />
         </Box>
-        <Box padding={'10px'}>
-          <h1>Intent</h1>
+        <Box padding={'10px'} fontSize={'18px'}>
+          <b>Intent</b>
         </Box>
-        <Box padding={'5px'}>
+        <Box padding={'10px'}>
           <Stack direction='row' spacing={4} align='center'>
             <Button onClick={handleRandom}>Random</Button>
           </Stack>
@@ -278,7 +278,7 @@ export default function Home({ apiUrl }) {
         <Box padding={'10px'}>
           1. Color
         </Box>
-        <Box padding={'5px'}>
+        <Box padding={'10px'}>
           <Stack direction='row' spacing={4} align='center'>
             <Button onClick={handleColorDarker}>Darker</Button>
             <Button onClick={handleColorLighter}>Lighter</Button>
@@ -287,7 +287,7 @@ export default function Home({ apiUrl }) {
         <Box padding={'10px'}>
           2. Pattern
         </Box>
-        <Box padding={'5px'}>
+        <Box padding={'10px'}>
           <Stack direction='row' spacing={4} align='center'>
             <Button onClick={handlePatternDenser}>Denser</Button>
             <Button onClick={handlePatternSparser}>Sparser</Button>
@@ -296,7 +296,7 @@ export default function Home({ apiUrl }) {
         <Box padding={'10px'}>
           3. Text
         </Box>
-        <Box padding={'5px'}>
+        <Box padding={'10px'}>
           <Stack direction='row' spacing={4} align='center'>
             <Button onClick={handleTextSmaller}>Smaller</Button>
             <Button onClick={handleTextBigger}>Bigger</Button>
