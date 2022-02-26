@@ -5,11 +5,13 @@ import crossover from '../../utilities/crossover';
 import mutation from '../../utilities/mutation';
 import {initializeCanvas, generateBackground} from '../../utilities/generateBackground';
 import rgbToHex from '../../utilities/rgbToHex';
+import { INTENT_DEFAULT } from '../../utilities/intentConst';
 
 export default async (req, res) => {
     if (req.method === 'POST') {
         // Receive value from request body
-        const sessionId = req.body.sessionId;
+        const sessionId = req.body.sessionId || "default-session";
+        const intent = req.body.intent || INTENT_DEFAULT;
         const populationSize = 8;
 
         // Initialize Firebase Admin instance
@@ -58,9 +60,9 @@ export default async (req, res) => {
 
             // #2: GA operators (crossover and mutation)
             for (let i = 0; i < parentList.length; i+=2) {
-                const [newIndividualOne, newIndividualTwo] = crossover([...parentList[i]], [...parentList[i+1]]);
-                const mutatedIndividualOne = mutation([...newIndividualOne]);
-                const mutatedIndividualTwo = mutation([...newIndividualTwo]);
+                const [newIndividualOne, newIndividualTwo] = crossover([...parentList[i]], [...parentList[i+1]], intent);
+                const mutatedIndividualOne = mutation([...newIndividualOne], intent);
+                const mutatedIndividualTwo = mutation([...newIndividualTwo], intent);
                 newPopulationList.push(mutatedIndividualOne);
                 newPopulationList.push(mutatedIndividualTwo);
             }
