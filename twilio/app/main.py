@@ -15,12 +15,15 @@ api_router = APIRouter(prefix="/align/twilio")
 with open("env.json", "r") as envfile:
     twilio_creds = json.load(envfile)
 
-account_sid = twilio_creds["cakraocha"]["accountSid"]
-api_key = twilio_creds["cakraocha"]["apiKey"]
-api_secret = twilio_creds["cakraocha"]["apiSecret"]
+# account_sid = twilio_creds["cakraocha"]["accountSid"]
+# api_key = twilio_creds["cakraocha"]["apiKey"]
+# api_secret = twilio_creds["cakraocha"]["apiSecret"]
 
-twilio_client = Client(account_sid, api_key, api_secret)
-# twilio_client = Client(account_sid, auth_token)
+account_sid = twilio_creds["main"]["accountSid"]
+auth_token = twilio_creds["main"]["authToken"]
+
+# twilio_client = Client(account_sid, api_key, api_secret)
+twilio_client = Client(account_sid, auth_token)
 
 @api_router.get("/", status_code=200)
 async def root() -> dict:
