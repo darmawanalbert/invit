@@ -5,7 +5,7 @@ import rgbToHex from '../../utilities/rgbToHex';
 export default (req, res) => {
     if (req.method === 'POST') {
         const sessionId = req.body.sessionId;
-        const populationList = initialPopulation(4);
+        const populationList = initialPopulation(10);
         const canvasObject = initializeCanvas();
         const invitationList = [];
         for (let i = 0; i < populationList.length; i++) {
