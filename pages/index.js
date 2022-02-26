@@ -1,65 +1,162 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import { 
+  Box,
+  Grid,
+  GridItem,
+  Flex,
+  Spacer,
+  Input,
+  Button,
+  Center,
+  Skeleton,
+  Stack
+} from '@chakra-ui/react'
 
-export default function Home() {
+import React,
+{useState, useEffect, useRef} from 'react'
+import uuid from 'react-uuid'
+import axios from 'axios';
+import CanvasRenderer from '../components/CanvasRenderer'
+
+export default function Home({ apiUrl }) {
+  // Sample usage: axios.post(`${apiUrl}/generate-design`)
+
+  const [sessionId, setSessionId] = useState('')
+  const [invitationList, setInvitationList] = useState([])
+  const [visibilityState, setVisibilityState] = useState('visible')
+
+  const generateSessionId = () => {
+    return uuid()
+  }
+
+  const getData = async (sessionId) => {
+    const res = await axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId});
+    return await res.data
+  }
+
+  useEffect(() => {
+    setSessionId(generateSessionId())
+    getData(sessionId).then(data => {
+      console.log(data.invitationList)
+      setInvitationList(data.invitationList)
+      setVisibilityState("hidden")
+    })
+  },[])
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+    <>
+    <Flex as="header" position="fixed" w="100%" bg={'white'} border={'1px solid #CCC'}>
+      <Box p='4'>
+        Alternative Design
+      </Box>
+      <Spacer />
+      <Box p='4' >
+        {/* <Button colorScheme='green'>Download</Button> */}
+      </Box>
+    </Flex>
+    <Grid
+      padding={'10px'}
+      paddingTop={'80px'}
+      h='1000px'
+      templateRows='repeat(1, 1fr)'
+      templateColumns='repeat(4, 1fr)'
+      gap={4}
+    >
+      <GridItem colSpan={1} border={'1px solid #CCC'} >
+        <Box padding={'10px'}>
+          Text Data
+        </Box>
+        <Box padding={'10px'}>
+          <Input placeholder='Data text' />
+          <Input placeholder='Data text' marginTop={'10px'}/>
+          <Input placeholder='Data text' marginTop={'10px'}/>
+          <Input placeholder='Data text' marginTop={'10px'}/>
+        </Box>
+        <Box padding={'10px'}>
+          Data 2
+        </Box>
+        <Box padding={'10px'}>
+        <Stack direction='row' spacing={4} align='center'>
+          <Button>Darker</Button>
+          <Button>Lighter</Button>
+        </Stack>
+        </Box>
+        
+      </GridItem>        
+      <GridItem colSpan={3} border={'1px solid #CCC'} overflow={'scroll'}>
+        <Grid templateColumns='repeat(4, 1fr)' gap={6}>
+        {invitationList.length === 0 ? (
+          <>
+            <Box h='390' key='1'>
+              <Center>
+                <Skeleton height='390px' width='270px'/>
+              </Center>
+            </Box>
+            <Box h='390' key='2'>
+              <Center>
+                <Skeleton height='390px' width='270px'/>
+              </Center>
+            </Box>
+            <Box h='390' key='3'>
+              <Center>
+                <Skeleton height='390px' width='270px'/>
+              </Center>
+            </Box>
+            <Box h='390' key='4'>
+              <Center>
+                <Skeleton height='390px' width='270px'/>
+              </Center>
+            </Box>
+            <Box h='390' key='5'>
+              <Center>
+                <Skeleton height='390px' width='270px'/>
+              </Center>
+            </Box>
+            <Box h='390' key='6'>
+              <Center>
+                <Skeleton height='390px' width='270px'/>
+              </Center>
+            </Box>
+            <Box h='390' key='7'>
+              <Center>
+                <Skeleton height='390px' width='270px'/>
+              </Center>
+            </Box>
+            <Box h='390' key='8'>
+              <Center>
+                <Skeleton height='390px' width='270px'/>
+              </Center>
+            </Box>
+          </>
+          ) : (
+            invitationList.map((invitationObject, index) => (
+              <Box h='390'cursor={'pointer'} padding={'10px'} key={String(index)}>
+                <Center>
+                  <CanvasRenderer 
+                    base64image={invitationObject.bgBase64}
+                    textColor={invitationObject.textColor}
+                    textSize={invitationObject.textSize}
+                    boxIndex={String(index)}
+                  />
+                </Center>
+              </Box>
+            ))
+          )}
+        
+          
+        </Grid>
+      </GridItem>
+    </Grid>
+    </>
   )
+}
+
+export async function getStaticProps() {
+  const apiUrl = process.env.API_URL;
+  return {
+      props: {
+          apiUrl,
+      },
+  };
 }
