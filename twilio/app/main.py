@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, Request
 
-from twilio.rest import Client
+import requests
 
 import json
 
@@ -15,15 +15,8 @@ api_router = APIRouter(prefix="/align/twilio")
 with open("env.json", "r") as envfile:
     twilio_creds = json.load(envfile)
 
-# account_sid = twilio_creds["cakraocha"]["accountSid"]
-# api_key = twilio_creds["cakraocha"]["apiKey"]
-# api_secret = twilio_creds["cakraocha"]["apiSecret"]
-
 account_sid = twilio_creds["main"]["accountSid"]
 auth_token = twilio_creds["main"]["authToken"]
-
-# twilio_client = Client(account_sid, api_key, api_secret)
-twilio_client = Client(account_sid, auth_token)
 
 @api_router.get("/", status_code=200)
 async def root() -> dict:
@@ -32,14 +25,17 @@ async def root() -> dict:
 @api_router.post("/invite", status_code=200)
 async def invite(request: Request) -> dict:
     req = await request.json()
-    print(req["num"])
-    msg = twilio_client.messages.create(
-        body="Wildan memang Hot. Dari Clarisca :* :*",
-        from_="+19034626259",
-        to=req["num"]
-    )
+    phone = req["num"]
+    url = "https://api.twilio.com/2010-04-01/Accounts/AC66f01d289767252436f377e1af928b34/Messages.json"
+    params = {
+        "Body": "Bella main yuk ini yang kedua",
+        "From": "+19034626259",
+        "To": phone
+    }
 
-    return {"msg": msg}
+    msg = requests.post(url=url, data=params, auth=(account_sid, auth_token))
+
+    return {"msg": msg.json()}
 
 
 app.include_router(api_router)
