@@ -10,7 +10,8 @@ import {
   Button,
   Center,
   Skeleton,
-  Stack
+  Stack,
+  Textarea
 } from '@chakra-ui/react'
 
 import React,
@@ -24,7 +25,11 @@ export default function Home({ apiUrl }) {
 
   const [sessionId, setSessionId] = useState('')
   const [invitationList, setInvitationList] = useState([])
-  const [visibilityState, setVisibilityState] = useState('visible')
+
+  const [partnerOne, setPartnerOne] = useState('')
+  const [partnerTwo, setPartnerTwo] = useState('')
+  const [date, setDate] = useState('')
+  const [place, setPlace] = useState('')
 
   const generateSessionId = () => {
     return uuid()
@@ -36,11 +41,10 @@ export default function Home({ apiUrl }) {
   }
 
   useEffect(() => {
-    setSessionId(generateSessionId())
+    const sessionId = generateSessionId()
+    setSessionId(sessionId)
     getData(sessionId).then(data => {
-      console.log(data.invitationList)
       setInvitationList(data.invitationList)
-      setVisibilityState("hidden")
     })
   },[])
 
@@ -65,16 +69,16 @@ export default function Home({ apiUrl }) {
     >
       <GridItem colSpan={1} border={'1px solid #CCC'} >
         <Box padding={'10px'}>
-          Text Data
+          Detail Information
         </Box>
         <Box padding={'10px'}>
-          <Input placeholder='Data text' />
-          <Input placeholder='Data text' marginTop={'10px'}/>
-          <Input placeholder='Data text' marginTop={'10px'}/>
-          <Input placeholder='Data text' marginTop={'10px'}/>
+          <Input placeholder='Partner One' />
+          <Input placeholder='Partner Two' marginTop={'10px'}/>
+          <Input type={'date'} placeholder='Date' marginTop={'10px'}/>
+          <Input placeholder='Place' marginTop={'10px'}/>
         </Box>
         <Box padding={'10px'}>
-          Data 2
+          <Textarea placeholder='Tell your story' />
         </Box>
         <Box padding={'10px'}>
         <Stack direction='row' spacing={4} align='center'>
@@ -142,9 +146,7 @@ export default function Home({ apiUrl }) {
                 </Center>
               </Box>
             ))
-          )}
-        
-          
+          )}  
         </Grid>
       </GridItem>
     </Grid>
