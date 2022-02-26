@@ -17,7 +17,6 @@ api_router = APIRouter(prefix="/align/twilio")
 class Invitation(BaseModel):
     num: str
     inviter: str
-    invitee: str
     invitation_url: HttpUrl
 
 account_sid = os.environ.get("TWILIO_SID")
@@ -31,9 +30,8 @@ async def root() -> dict:
 async def invite(request: Invitation) -> dict:
     phone = request.num
     inviter = request.inviter
-    invitee = request.invitee
     invitation_url = request.invitation_url
-    body = f"Hi {invitee},\nYou are invited to our wedding, {inviter}. Please see {invitation_url} to see the invitation. :)"
+    body = f"Hello there,\nYou are invited to our wedding, {inviter}. Please see {invitation_url} to see the invitation. :)"
     url = "https://api.twilio.com/2010-04-01/Accounts/AC66f01d289767252436f377e1af928b34/Messages.json"
     params = {
         "Body": body,
