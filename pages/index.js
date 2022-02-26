@@ -8,14 +8,14 @@ import {
   Spacer,
   Input,
   Button,
-  Center,
-  Skeleton,
   Stack,
-  Textarea
+  Textarea,
+  Center,
+  Skeleton
 } from '@chakra-ui/react'
 
 import React,
-{useState, useEffect, useRef} from 'react'
+{useState, useEffect, useRef, useMemo} from 'react'
 import uuid from 'react-uuid'
 import axios from 'axios';
 import CanvasRenderer from '../components/CanvasRenderer'
@@ -30,13 +30,176 @@ export default function Home({ apiUrl }) {
   const [partnerTwo, setPartnerTwo] = useState('')
   const [date, setDate] = useState('')
   const [place, setPlace] = useState('')
+  const [generateCanvasList, setGenerateCanvasList] = useState(handleGenerateCanvasList())
+  const gridListRef = useRef(null)
 
   const generateSessionId = () => {
     return uuid()
   }
 
+  function temp_handleGenerateCanvasList(){
+    return (<>
+      <Box h='390' key='1'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='2'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='3'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='4'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='5'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='6'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='7'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='8'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+    </>)
+  }
+
+  function handleGenerateCanvasList() {
+    return (invitationList.length === 0 ? (
+      <>
+        <Box h='390' key='1'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='2'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='3'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='4'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='5'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='6'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='7'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+        <Box h='390' key='8'>
+          <Center>
+            <Skeleton height='390px' width='270px'/>
+          </Center>
+        </Box>
+      </>
+      ) : (
+        invitationList.map((invitationObject, index) => (
+          <Box h='390'cursor={'pointer'} padding={'10px'} key={String(index)}>
+            <Center>
+              <CanvasRenderer 
+                base64image={invitationObject.bgBase64}
+                textColor={invitationObject.textColor}
+                textSize={invitationObject.textSize}
+                boxIndex={String(index)}
+              />
+            </Center>
+          </Box>
+        ))
+      ))
+  }
+
+  const handleRandom = async () => {
+    axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "none" }).then(data => {
+      setInvitationList(data.data.invitationList)
+    }).catch(data => {
+      console.log("error color lighter.")
+    })
+  }
+
+  const handleColorDarker = async () => {
+    axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "color_darker" }).then(data => {
+      setInvitationList(data.data.invitationList)
+    }).catch(data => {
+      console.log("error color darker.")
+    })
+  }
+
+  const handleColorLighter = async () => {
+    axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "color_lighter" }).then(data => {
+      setInvitationList(data.data.invitationList)
+    }).catch(data => {
+      console.log("error color lighter.")
+    })
+  }
+
+  const handlePatternDenser = async () => {
+    axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "pattern_denser" }).then(data => {
+      setInvitationList(data.data.invitationList)
+    }).catch(data => {
+      console.log("error pattern denser.")
+    })
+  }
+
+  const handlePatternSparser = async () => {
+    axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "pattern_sparser" }).then(data => {
+      setInvitationList(data.data.invitationList)
+    }).catch(data => {
+      console.log("error pattern sparser.")
+    })
+  }
+
+  const handleTextSmaller = async () => {
+    axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "text_smaller" }).then(data => {
+      setInvitationList(data.data.invitationList)
+    }).catch(data => {
+      console.log("error text smaller.")
+    })
+  }
+
+  const handleTextBigger = async () => {
+    axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "none" }).then(data => {
+      setInvitationList(data.data.invitationList)
+    }).catch(data => {
+      console.log(data)
+    })
+  }
+
   const getData = async (sessionId) => {
-    const res = await axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId});
+    const res = await axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "none" });
     return await res.data
   }
 
@@ -45,8 +208,18 @@ export default function Home({ apiUrl }) {
     setSessionId(sessionId)
     getData(sessionId).then(data => {
       setInvitationList(data.invitationList)
+    }).catch(data => {
+      console.log(data)
     })
   },[])
+
+  useEffect(() => {
+    setGenerateCanvasList(temp_handleGenerateCanvasList())
+    const timer = setTimeout(() => {
+      setGenerateCanvasList(handleGenerateCanvasList())
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [invitationList])
 
   return (
     <>
@@ -81,72 +254,48 @@ export default function Home({ apiUrl }) {
           <Textarea placeholder='Tell your story' />
         </Box>
         <Box padding={'10px'}>
-        <Stack direction='row' spacing={4} align='center'>
-          <Button>Darker</Button>
-          <Button>Lighter</Button>
-        </Stack>
+          <h1>Intent</h1>
+        </Box>
+        <Box padding={'5px'}>
+          <Stack direction='row' spacing={4} align='center'>
+            <Button onClick={handleRandom}>Random</Button>
+          </Stack>
+        </Box>
+        <Box padding={'10px'}>
+          <b>I want to make the:</b>
+        </Box>
+        <Box padding={'10px'}>
+          1. Color
+        </Box>
+        <Box padding={'5px'}>
+          <Stack direction='row' spacing={4} align='center'>
+            <Button onClick={handleColorDarker}>Darker</Button>
+            <Button onClick={handleColorLighter}>Lighter</Button>
+          </Stack>
+        </Box>
+        <Box padding={'10px'}>
+          2. Pattern
+        </Box>
+        <Box padding={'5px'}>
+          <Stack direction='row' spacing={4} align='center'>
+            <Button onClick={handlePatternDenser}>Denser</Button>
+            <Button onClick={handlePatternSparser}>Sparser</Button>
+          </Stack>
+        </Box>
+        <Box padding={'10px'}>
+          3. Text
+        </Box>
+        <Box padding={'5px'}>
+          <Stack direction='row' spacing={4} align='center'>
+            <Button onClick={handleTextSmaller}>Smaller</Button>
+            <Button onClick={handleTextBigger}>Bigger</Button>
+          </Stack>
         </Box>
         
       </GridItem>        
       <GridItem colSpan={3} border={'1px solid #CCC'} overflow={'scroll'}>
-        <Grid templateColumns='repeat(4, 1fr)' gap={6}>
-        {invitationList.length === 0 ? (
-          <>
-            <Box h='390' key='1'>
-              <Center>
-                <Skeleton height='390px' width='270px'/>
-              </Center>
-            </Box>
-            <Box h='390' key='2'>
-              <Center>
-                <Skeleton height='390px' width='270px'/>
-              </Center>
-            </Box>
-            <Box h='390' key='3'>
-              <Center>
-                <Skeleton height='390px' width='270px'/>
-              </Center>
-            </Box>
-            <Box h='390' key='4'>
-              <Center>
-                <Skeleton height='390px' width='270px'/>
-              </Center>
-            </Box>
-            <Box h='390' key='5'>
-              <Center>
-                <Skeleton height='390px' width='270px'/>
-              </Center>
-            </Box>
-            <Box h='390' key='6'>
-              <Center>
-                <Skeleton height='390px' width='270px'/>
-              </Center>
-            </Box>
-            <Box h='390' key='7'>
-              <Center>
-                <Skeleton height='390px' width='270px'/>
-              </Center>
-            </Box>
-            <Box h='390' key='8'>
-              <Center>
-                <Skeleton height='390px' width='270px'/>
-              </Center>
-            </Box>
-          </>
-          ) : (
-            invitationList.map((invitationObject, index) => (
-              <Box h='390'cursor={'pointer'} padding={'10px'} key={String(index)}>
-                <Center>
-                  <CanvasRenderer 
-                    base64image={invitationObject.bgBase64}
-                    textColor={invitationObject.textColor}
-                    textSize={invitationObject.textSize}
-                    boxIndex={String(index)}
-                  />
-                </Center>
-              </Box>
-            ))
-          )}  
+        <Grid templateColumns='repeat(4, 1fr)' gap={6} id="gridListRef" ref={gridListRef}>  
+          {generateCanvasList}
         </Grid>
       </GridItem>
     </Grid>
