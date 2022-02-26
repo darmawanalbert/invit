@@ -31,7 +31,8 @@ export default async (req, res) => {
                         firebaseStorageDownloadTokens: sessionId,
                     },
                 });
-                res.status(200).json({ fileName });
+                const url = `https://firebasestorage.googleapis.com/v0/b/invit-77505.appspot.com/o/pdf%2Finvitation-${sessionId}.pdf?alt=media&token=${sessionId}`;
+                res.status(200).json({ fileUrl: url });
             })
             .catch((err) => {
                 console.log(err);
