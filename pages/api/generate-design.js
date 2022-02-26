@@ -5,7 +5,8 @@ import crossover from '../../utilities/crossover';
 import mutation from '../../utilities/mutation';
 import {initializeCanvas, generateBackground} from '../../utilities/generateBackground';
 import rgbToHex from '../../utilities/rgbToHex';
-import { INTENT_DEFAULT } from '../../utilities/intentConst';
+import { INTENT_COLOR_DARKER, INTENT_DEFAULT , INTENT_COLOR_LIGHTER, INTENT_PATTERN_DENSER, INTENT_PATTERN_SPARSER, INTENT_TEXT_SMALLER, INTENT_TEXT_BIGGER} from '../../utilities/intentConst';
+import { sortColorDarker , sortColorLighter, sortPatternDenser, sortPatternSparser, sortTextSmaller, sortTextBigger} from '../../utilities/intentSort';
 
 export default async (req, res) => {
     if (req.method === 'POST') {
@@ -52,13 +53,27 @@ export default async (req, res) => {
             }
         } else {
             const currentPopulationList = Object.values(sessionDoc.data())
-            // Perform GA operations to generate the next generations
-            let newPopulationList = [];
+            // Yield the next generations
             // #1: Selection
-            // TODO: Incorporate selection based on user's intent
-            const parentList = currentPopulationList.slice(0, currentPopulationList.length / 2);
+            let parentList = [];
+            if (intent === INTENT_COLOR_DARKER) {
+                parentList = currentPopulationList.sort(sortColorDarker).slice(0, currentPopulationList.length / 2);
+            } else if (intent === INTENT_COLOR_LIGHTER) {
+                parentList = currentPopulationList.sort(sortColorLighter).slice(0, currentPopulationList.length / 2);
+            } else if (intent === INTENT_PATTERN_DENSER) {
+                parentList = currentPopulationList.sort(sortPatternDenser).slice(0, currentPopulationList.length / 2);
+            } else if (intent === INTENT_PATTERN_SPARSER) {
+                parentList = currentPopulationList.sort(sortPatternSparser).slice(0, currentPopulationList.length / 2);
+            } else if (intent === INTENT_TEXT_SMALLER) {
+                parentList = currentPopulationList.sort(sortTextSmaller).slice(0, currentPopulationList.length / 2);
+            } else if (intent === INTENT_TEXT_BIGGER) {
+                parentList = currentPopulationList.sort(sortTextBigger).slice(0, currentPopulationList.length / 2);
+            } else {
+                parentList = currentPopulationList.slice(0, currentPopulationList.length / 2);
+            }
 
             // #2: GA operators (crossover and mutation)
+            let newPopulationList = [];
             for (let i = 0; i < parentList.length; i+=2) {
                 const [newIndividualOne, newIndividualTwo] = crossover([...parentList[i]], [...parentList[i+1]], intent);
                 const mutatedIndividualOne = mutation([...newIndividualOne], intent);
