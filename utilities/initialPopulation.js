@@ -14,7 +14,7 @@ const initialPopulation = (populationSizeParam) => {
     #4: strokeColor G value (0-255)
     #5: strokeColor B value (0-255)
     #6: tileSize (1-70)
-    #7: bgType (0-1)
+    #7: bgType (0-3)
     Text
     #8: fontColor R value (0-255)
     #9: fontColor G value (0-255)
@@ -31,7 +31,7 @@ const initialPopulation = (populationSizeParam) => {
         individual.push(getRandomInt(256));
         individual.push(getRandomInt(256));
         individual.push(getRandomInt(70) + 1);
-        individual.push(getRandomInt(2));
+        individual.push(getRandomInt(4));
         // Text
         individual.push(getRandomInt(256));
         individual.push(getRandomInt(256));

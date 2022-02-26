@@ -57,7 +57,7 @@ const mutation = (individual, intentParam) => {
             if (mutationPoint === 6) {
                 mutationValue = getRandomInt(70) + 1;
             } else if (mutationPoint === 7) {
-                mutationValue = getRandomInt(2);
+                mutationValue = getRandomInt(4);
             } else if (mutationPoint === 11) {
                 mutationValue = getRandomInt(37) + 12;
             }
