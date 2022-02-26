@@ -51,21 +51,20 @@ export default async (req, res) => {
         } else {
             const currentPopulationList = Object.values(sessionDoc.data())
             // Perform GA operations to generate the next generations
-            const newPopulationList = [];
-                // #1: Selection
-                // TODO: Incorporate selection based on user's intent
+            let newPopulationList = [];
+            // #1: Selection
+            // TODO: Incorporate selection based on user's intent
             const parentList = currentPopulationList.slice(0, currentPopulationList.length / 2);
 
-                // #2: GA operators (crossover and mutation)
+            // #2: GA operators (crossover and mutation)
             for (let i = 0; i < parentList.length; i+=2) {
-                const [newIndividualOne, newIndividualTwo] = crossover(parentList[i], parentList[i+1]);
-                const mutatedIndividualOne = mutation(newIndividualOne);
-                const mutatedIndividualTwo = mutation(newIndividualTwo);
+                const [newIndividualOne, newIndividualTwo] = crossover([...parentList[i]], [...parentList[i+1]]);
+                const mutatedIndividualOne = mutation([...newIndividualOne]);
+                const mutatedIndividualTwo = mutation([...newIndividualTwo]);
                 newPopulationList.push(mutatedIndividualOne);
                 newPopulationList.push(mutatedIndividualTwo);
             }
-            newPopulationList.concat(parentList)
-
+            newPopulationList = newPopulationList.concat(parentList);
             // Save the new population to Firestore
             const res = await sessionRef.set({ ...newPopulationList });
 
