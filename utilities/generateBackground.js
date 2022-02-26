@@ -178,7 +178,7 @@ const generateBackground = (canvasObject, fillColor, strokeColor, tileSize, bgTy
     const scenePopulator = {
         0:lineScene,
         1:particlesScene,
-        2:lineScene,
+        2:triangleTesselationScene,
         3:tiledSquareScene
     }
 
