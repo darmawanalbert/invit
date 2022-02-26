@@ -230,7 +230,7 @@ export default function Home({ apiUrl }) {
       setGenerateCanvasList(handleGenerateCanvasList())
     }, 1000);
     return () => clearTimeout(timer);
-  }, [invitationList])
+  }, [invitationList, partnerOne, partnerTwo, date, place])
 
   return (
     <>
@@ -260,9 +260,6 @@ export default function Home({ apiUrl }) {
           <Input placeholder='Partner Two' value={partnerTwo} marginTop={'10px'} onChange={(e) => setPartnerTwo(e.currentTarget.value)} />
           <Input type={'date'} placeholder='Date' value={date} marginTop={'10px'} onChange={(e) => setDate(e.currentTarget.value)} />
           <Input placeholder='Place' marginTop={'10px'} value={place} onChange={(e) => setPlace(e.currentTarget.value)}/>
-        </Box>
-        <Box padding={'10px'}>
-          <Textarea placeholder='Tell your story' />
         </Box>
         <Box padding={'10px'} fontSize={'18px'}>
           <b>Intent</b>
