@@ -5,14 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "vercel-build": "yum install libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/ && yarn build"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.5",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "axios": "^0.26.0",
-    "canvas": "^2.9.0",
+    "canvas": "2.6.1",
     "firebase-admin": "^10.0.2",
     "framer-motion": "^6",
     "jspdf": "^2.5.1",
