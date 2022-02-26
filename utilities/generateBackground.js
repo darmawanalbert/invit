@@ -26,24 +26,44 @@ const tiledSquareScene = (scene, fillColor, strokeColor, tileSize ) => {
 
 }
 
-const rhombusScene = (scene, fillColor, strokeColor, tileSize ) => {
+const lineScene = (scene, fillColor, strokeColor, tileSize ) => {
 
     const cx = scene.width * 0.5;
     const cy = scene.height * 0.5;
     const background = scene.makeRectangle(cx, cy, scene.width, scene.height);
     background.noStroke();
-    background.fill = 'rgb(255, 255, 255)';
+    background.fill = `rgb(${fillColor[0]}, ${fillColor[1]}, ${fillColor[2]})`;
     background.name = 'background';
 
     
-    const outerRect = scene.makeRectangle(cx, cy, scene.width, scene.width);
-    outerRect.rotation = 145;
-    outerRect.fill = `rgb(${fillColor[0]}, ${fillColor[1]}, ${fillColor[2]})`;
-
-    const innerRect = scene.makeRectangle(cx, cy, scene.width * 0.8, scene.width * 0.8);
-    innerRect.rotation = 145;
-    innerRect.fill = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
+    const t1 = scene.makeLine(0, 300, 250, 0);
+    t1.linewidth = 10;
+    t1.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
+    const t2 = scene.makeLine(0, 200, 500, 0);
+    t2.linewidth = 10;
+    t2.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
     
+    const t3 = scene.makeLine(1080, 280, 750, 0);
+    t3.linewidth = 10;
+    t3.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
+    const t4 = scene.makeLine(1080, 280, 900, 0);
+    t4.linewidth = 10;
+    t4.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
+
+
+    const t5 = scene.makeLine(0, 1280, 120, 1560);
+    t5.linewidth = 10;
+    t5.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
+    const t6 = scene.makeLine(0, 1200, 450, 1560);
+    t6.linewidth = 10;
+    t6.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
+    
+    const t7 = scene.makeLine(750, 1560, 1080, 1340);
+    t7.linewidth = 10;
+    t7.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
+    const t8 = scene.makeLine(900, 1560, 1080, 1180);
+    t8.linewidth = 10;
+    t8.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
 
 }
 
@@ -111,8 +131,9 @@ const generateBackground = (canvasObject, fillColor, strokeColor, tileSize, bgTy
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 
     const scenePopulator = {
-        0:tiledSquareScene,
-        1:particlesScene
+        0:lineScene,
+        1:particlesScene,
+        2:lineScene
     }
 
     scenePopulator[bgType](scene, fillColor,strokeColor, tileSize, bgType);
