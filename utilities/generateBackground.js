@@ -49,7 +49,7 @@ const rhombusScene = (scene, fillColor, strokeColor, tileSize ) => {
 
 const particlesScene = (scene, fillColor, strokeColor, tileSize ) => {
 
-    const SCALED_TILESIZE = tileSize * 4;
+    const SCALED_TILESIZE = (tileSize * 4) >= 54 ? tileSize * 4 : 54 ;
     const cx = scene.width * 0.5;
     const cy = scene.height * 0.5;
     const background = scene.makeRectangle(cx, cy, scene.width, scene.height);
