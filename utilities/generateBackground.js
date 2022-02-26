@@ -1,10 +1,13 @@
 import Two from "../components/twojs/two"
 import { createCanvas, Image } from "canvas"
 
+const mapOverRange = (val, in_min, in_max, out_min, out_max) => {
+    return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 const tiledSquareScene = (scene, fillColor, strokeColor, tileSize ) => {
 
-    const SCALED_TILESIZE = tileSize * 4;
+    const SCALED_TILESIZE = (tileSize * 4) >= 54 ? tileSize * 4 : 54 ;
     const vTile = Math.ceil(scene.height / SCALED_TILESIZE);
     const hTile = Math.ceil(scene.width / SCALED_TILESIZE);
 
@@ -23,6 +26,26 @@ const tiledSquareScene = (scene, fillColor, strokeColor, tileSize ) => {
 
 }
 
+const rhombusScene = (scene, fillColor, strokeColor, tileSize ) => {
+
+    const cx = scene.width * 0.5;
+    const cy = scene.height * 0.5;
+    const background = scene.makeRectangle(cx, cy, scene.width, scene.height);
+    background.noStroke();
+    background.fill = 'rgb(255, 255, 255)';
+    background.name = 'background';
+
+    
+    const outerRect = scene.makeRectangle(cx, cy, scene.width, scene.width);
+    outerRect.rotation = 145;
+    outerRect.fill = `rgb(${fillColor[0]}, ${fillColor[1]}, ${fillColor[2]})`;
+
+    const innerRect = scene.makeRectangle(cx, cy, scene.width * 0.8, scene.width * 0.8);
+    innerRect.rotation = 145;
+    innerRect.fill = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
+    
+
+}
 
 const particlesScene = (scene, fillColor, strokeColor, tileSize ) => {
 
