@@ -1,6 +1,8 @@
 import * as admin from 'firebase-admin';
 
 import initialPopulation from '../../utilities/initialPopulation';
+import crossover from '../../utilities/crossover';
+import mutation from '../../utilities/mutation';
 import {initializeCanvas, generateBackground} from '../../utilities/generateBackground';
 import rgbToHex from '../../utilities/rgbToHex';
 
@@ -8,6 +10,7 @@ export default async (req, res) => {
     if (req.method === 'POST') {
         // Receive value from request body
         const sessionId = req.body.sessionId;
+        const populationSize = 8;
 
         // Initialize Firebase Admin instance
         const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
@@ -25,9 +28,8 @@ export default async (req, res) => {
         const sessionDoc = await sessionRef.get();
         const invitationList = []
         if (!sessionDoc.exists) {
-            console.log("The document doesn't exist");
             // Create new population
-            const populationList = initialPopulation(10);
+            const populationList = initialPopulation(populationSize);
 
             // Save the new population to Firestore
             const res = await sessionRef.set({ ...populationList });
@@ -47,12 +49,22 @@ export default async (req, res) => {
                 invitationList.push(invitationObject);
             }
         } else {
-            console.log("The document already exists!");
-            const currentPopulation = Object.values(sessionDoc.data())
-            console.log(currentPopulation);
+            const currentPopulationList = Object.values(sessionDoc.data())
             // Perform GA operations to generate the next generations
-            // TODO: Change this, for now let's use initial population
-            const newPopulationList = initialPopulation(10);
+            const newPopulationList = [];
+                // #1: Selection
+                // TODO: Incorporate selection based on user's intent
+            const parentList = currentPopulationList.slice(0, currentPopulationList.length / 2);
+
+                // #2: GA operators (crossover and mutation)
+            for (let i = 0; i < parentList.length; i+=2) {
+                const [newIndividualOne, newIndividualTwo] = crossover(parentList[i], parentList[i+1]);
+                const mutatedIndividualOne = mutation(newIndividualOne);
+                const mutatedIndividualTwo = mutation(newIndividualTwo);
+                newPopulationList.push(mutatedIndividualOne);
+                newPopulationList.push(mutatedIndividualTwo);
+            }
+            newPopulationList.concat(parentList)
 
             // Save the new population to Firestore
             const res = await sessionRef.set({ ...newPopulationList });
