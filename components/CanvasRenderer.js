@@ -43,7 +43,7 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
 
     const handleShareClick = () => {
 
-        // setIsOpen(false)
+        setIsOpen(false)
 
         width = width * 2
         height = height * 2
@@ -80,8 +80,6 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
         const pdf = new jsPDF({ orientation: 'p', unit: 'px', format: [width, height] });
         pdf.addImage(_canvas, 'PNG', 0, 0, width, height);
 
-        // alert(pdf.output('datauristring'))
-
         const data = {
             "num": phoneNumber,
             "inviter": `${partnerOne} & ${partnerTwo}`,
@@ -95,7 +93,6 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
     }
 
     const handleDownloadClick = () => {
-        // const _canvas = document.getElementById('canvas')
        
         setIsOpen(false)
 
@@ -255,8 +252,6 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
                     </ModalFooter>
                 </ModalContent>
                 </Modal>
-
-
             </>
         )
     )
