@@ -16,7 +16,7 @@ import {
 import uuid from 'react-uuid'
 import { jsPDF } from "jspdf";
 
-const CanvasRenderer = ({base64image, textColor, textSize, boxIndex}) => {
+const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTwo, date, place, boxIndex}) => {
     const canvasRef = useRef(null);
     const maxCanvasRef = useRef(null);
     const [image, setImage] = useState(null)
@@ -58,22 +58,22 @@ const CanvasRenderer = ({base64image, textColor, textSize, boxIndex}) => {
             ctx.fillStyle = textColor
             ctx.textAlign = "center"
 
-            ctx.fillText("OLIVIA", (minWidth/2), 1 * scaledTextSize +  0.25 * (minHeight))
+            ctx.fillText(partnerOne, (minWidth/2), 1 * scaledTextSize +  0.25 * (minHeight))
             ctx.fillText("&", (minWidth/2), 2 * scaledTextSize +  0.25 * (minHeight))
-            ctx.fillText("DEXTER", (minWidth/2), 3.0 * scaledTextSize +  0.25 * (minHeight))
+            ctx.fillText(partnerTwo, (minWidth/2), 3.0 * scaledTextSize +  0.25 * (minHeight))
 
             ctx.font = `10px Roboto`
             ctx.fillStyle = "#000000"
             ctx.textAlign = "center"
             
-            ctx.fillText("You are cordially invited", (minWidth/2), 0.2 * (minHeight))
+            ctx.fillText("You are cordially invited to:", (minWidth/2), 0.2 * (minHeight))
             
             ctx.font = `14px Montserrat`
             ctx.fillStyle = "#000000"
             ctx.textAlign = "center"
             ctx.fillText("Wonderful Wedding~~", (minWidth/2), 3.0 * scaledTextSize +  0.35 * (minHeight))
-            ctx.fillText("13 Dec 2022 | 8 Pm", (minWidth/2), 3.0 * scaledTextSize +  0.4 * (minHeight))
-            ctx.fillText("Loren Ipsum St. 3033", (minWidth/2), 3.0 * scaledTextSize +  0.45 * (minHeight))
+            ctx.fillText(date, (minWidth/2), 3.0 * scaledTextSize +  0.4 * (minHeight))
+            ctx.fillText(place, (minWidth/2), 3.0 * scaledTextSize +  0.45 * (minHeight))
         }
       }, [image])
 
@@ -89,22 +89,22 @@ const CanvasRenderer = ({base64image, textColor, textSize, boxIndex}) => {
             ctx.fillStyle = textColor
             ctx.textAlign = "center"
 
-            ctx.fillText("OLIVIA", (width/2), 1 * scaledTextSize +  0.25 * (height))
+            ctx.fillText(partnerOne, (width/2), 1 * scaledTextSize +  0.25 * (height))
             ctx.fillText("&", (width/2), 2 * scaledTextSize +  0.25 * (height))
-            ctx.fillText("DEXTER", (width/2), 3.0 * scaledTextSize +  0.25 * (height))
+            ctx.fillText(partnerTwo, (width/2), 3.0 * scaledTextSize +  0.25 * (height))
 
             ctx.font = `40px Roboto`
             ctx.fillStyle = "#000000"
             ctx.textAlign = "center"
             
-            ctx.fillText("You are cordially invited", (width/2), 0.2 * (height))
+            ctx.fillText("You are cordially invited to:", (width/2), 0.2 * (height))
             
             ctx.font = `56px Montserrat`
             ctx.fillStyle = "#000000"
             ctx.textAlign = "center"
             ctx.fillText("Wonderful Wedding~~", (width/2), 3.0 * scaledTextSize +  0.35 * (height))
-            ctx.fillText("13 Dec 2022 | 8 Pm", (width/2), 3.0 * scaledTextSize +  0.4 * (height))
-            ctx.fillText("Loren Ipsum St. 3033", (width/2), 3.0 * scaledTextSize +  0.45 * (height))
+            ctx.fillText(date, (width/2), 3.0 * scaledTextSize +  0.4 * (height))
+            ctx.fillText(place, (width/2), 3.0 * scaledTextSize +  0.45 * (height))
         }
 
     }, [maxImage])

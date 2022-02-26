@@ -26,10 +26,10 @@ export default function Home({ apiUrl }) {
   const [sessionId, setSessionId] = useState('')
   const [invitationList, setInvitationList] = useState([])
 
-  const [partnerOne, setPartnerOne] = useState('')
-  const [partnerTwo, setPartnerTwo] = useState('')
-  const [date, setDate] = useState('')
-  const [place, setPlace] = useState('')
+  const [partnerOne, setPartnerOne] = useState('Indo')
+  const [partnerTwo, setPartnerTwo] = useState('Mee')
+  const [date, setDate] = useState('22/02/2022')
+  const [place, setPlace] = useState('Melbourne')
   const [generateCanvasList, setGenerateCanvasList] = useState(handleGenerateCanvasList())
   const gridListRef = useRef(null)
 
@@ -134,6 +134,10 @@ export default function Home({ apiUrl }) {
                 base64image={invitationObject.bgBase64}
                 textColor={invitationObject.textColor}
                 textSize={invitationObject.textSize}
+                partnerOne={partnerOne}
+                partnerTwo={partnerTwo}
+                date={date}
+                place={place}
                 boxIndex={String(index)}
               />
             </Center>
@@ -143,6 +147,7 @@ export default function Home({ apiUrl }) {
   }
 
   const handleRandom = async () => {
+    setGenerateCanvasList(temp_handleGenerateCanvasList())
     axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "none" }).then(data => {
       setInvitationList(data.data.invitationList)
     }).catch(data => {
@@ -151,6 +156,7 @@ export default function Home({ apiUrl }) {
   }
 
   const handleColorDarker = async () => {
+    setGenerateCanvasList(temp_handleGenerateCanvasList())
     axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "color_darker" }).then(data => {
       setInvitationList(data.data.invitationList)
     }).catch(data => {
@@ -159,6 +165,7 @@ export default function Home({ apiUrl }) {
   }
 
   const handleColorLighter = async () => {
+    setGenerateCanvasList(temp_handleGenerateCanvasList())
     axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "color_lighter" }).then(data => {
       setInvitationList(data.data.invitationList)
     }).catch(data => {
@@ -167,6 +174,7 @@ export default function Home({ apiUrl }) {
   }
 
   const handlePatternDenser = async () => {
+    setGenerateCanvasList(temp_handleGenerateCanvasList())
     axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "pattern_denser" }).then(data => {
       setInvitationList(data.data.invitationList)
     }).catch(data => {
@@ -175,6 +183,7 @@ export default function Home({ apiUrl }) {
   }
 
   const handlePatternSparser = async () => {
+    setGenerateCanvasList(temp_handleGenerateCanvasList())
     axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "pattern_sparser" }).then(data => {
       setInvitationList(data.data.invitationList)
     }).catch(data => {
@@ -183,6 +192,7 @@ export default function Home({ apiUrl }) {
   }
 
   const handleTextSmaller = async () => {
+    setGenerateCanvasList(temp_handleGenerateCanvasList())
     axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "text_smaller" }).then(data => {
       setInvitationList(data.data.invitationList)
     }).catch(data => {
@@ -191,6 +201,7 @@ export default function Home({ apiUrl }) {
   }
 
   const handleTextBigger = async () => {
+    setGenerateCanvasList(temp_handleGenerateCanvasList())
     axios.post(`${apiUrl}/generate-design`, {"sessionId" : sessionId, "intent" : "none" }).then(data => {
       setInvitationList(data.data.invitationList)
     }).catch(data => {
@@ -245,10 +256,10 @@ export default function Home({ apiUrl }) {
           Detail Information
         </Box>
         <Box padding={'10px'}>
-          <Input placeholder='Partner One' />
-          <Input placeholder='Partner Two' marginTop={'10px'}/>
-          <Input type={'date'} placeholder='Date' marginTop={'10px'}/>
-          <Input placeholder='Place' marginTop={'10px'}/>
+          <Input placeholder='Partner One' value={partnerOne} onChange={(e) => setPartnerOne(e.currentTarget.value) } />
+          <Input placeholder='Partner Two' value={partnerTwo} marginTop={'10px'} onChange={(e) => setPartnerTwo(e.currentTarget.value)} />
+          <Input type={'date'} placeholder='Date' value={date} marginTop={'10px'} onChange={(e) => setDate(e.currentTarget.value)} />
+          <Input placeholder='Place' marginTop={'10px'} value={place} onChange={(e) => setPlace(e.currentTarget.value)}/>
         </Box>
         <Box padding={'10px'}>
           <Textarea placeholder='Tell your story' />
