@@ -10,18 +10,23 @@ import {
     Skeleton,
     Button,
     Box,
-    Center
+    Center,
+    InputGroup,
+    Input
 } from '@chakra-ui/react'
 
 import uuid from 'react-uuid'
 import { jsPDF } from "jspdf";
 
-const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTwo, date, place, boxIndex}) => {
+import axios from 'axios';
+
+const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTwo, date, place, apiUrl}) => {
     const canvasRef = useRef(null);
     const maxCanvasRef = useRef(null);
     const [image, setImage] = useState(null)
     const [maxImage, setMaxImage] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
+    const [phoneNumber, setPhoneNumber] = useState('')
     const onClose = () => setIsOpen(false)
 
     const width = 270 * 2
@@ -34,6 +39,59 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
         const _image = new Image();
         _image.src = `data:image/png;base64,${base64image}`;
         _image.onload = () => setMaxImage(_image)
+    }
+
+    const handleShareClick = () => {
+
+        // setIsOpen(false)
+
+        width = width * 2
+        height = height * 2
+
+        const ctx = maxCanvasRef.current.getContext('2d')
+
+        const scaledTextSize = (width / minWidth) * textSize
+        ctx.canvas.width  = width;
+        ctx.canvas.height = height
+        
+        ctx.drawImage(image, 0,0, width, height)
+        ctx.font = `${scaledTextSize}px Caveat Brush`
+        ctx.fillStyle = textColor
+        ctx.textAlign = "center"
+
+        ctx.fillText(partnerOne, (width/2), 1 * scaledTextSize +  0.25 * (height))
+        ctx.fillText("&", (width/2), 2 * scaledTextSize +  0.25 * (height))
+        ctx.fillText(partnerTwo, (width/2), 3.0 * scaledTextSize +  0.25 * (height))
+
+        ctx.font = `${10 * (width / minWidth)}px Roboto`
+        ctx.fillStyle = "#000000"
+        ctx.textAlign = "center"
+        
+        ctx.fillText("You are cordially invited to:", (width/2), 0.2 * (height))
+        
+        ctx.font = `${14 * (width / minWidth)}px Montserrat`
+        ctx.fillStyle = "#000000"
+        ctx.textAlign = "center"
+        ctx.fillText("Wonderful Wedding~~", (width/2), 3.0 * scaledTextSize +  0.35 * (height))
+        ctx.fillText(date, (width/2), 3.0 * scaledTextSize +  0.4 * (height))
+        ctx.fillText(place, (width/2), 3.0 * scaledTextSize +  0.45 * (height))
+
+        const _canvas = document.getElementById('maxCanvas')
+        const pdf = new jsPDF({ orientation: 'p', unit: 'px', format: [width, height] });
+        pdf.addImage(_canvas, 'PNG', 0, 0, width, height);
+
+        // alert(pdf.output('datauristring'))
+
+        const data = {
+            "num": phoneNumber,
+            "inviter": `${partnerOne} & ${partnerTwo}`,
+            "invitation_url": "https://invit.vercel.app"
+        }
+        axios.post(`${apiUrl}/send-invitation`, data).then(data => {
+            alert(`Invitation has been sent to: ${phoneNumber}`)
+        }).catch(data => {
+            console.log("error sent invitation.")
+        })
     }
 
     const handleDownloadClick = () => {
@@ -157,6 +215,9 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
                     width={minWidth}
                     height={minHeight}
                 ></canvas>
+                
+                {/* Modal Preview */}
+                
                 <Modal isOpen={isOpen} size='full' onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -176,6 +237,17 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
                     </ModalBody>
         
                     <ModalFooter>
+                    <InputGroup size='md'>
+                        <Input
+                            width={'400px'}
+                            type="text"
+                            placeholder='Enter phone number'
+                            onChange={(e) => setPhoneNumber(e.currentTarget.value)}
+                        />
+                        <Button onClick={handleShareClick}>
+                            Share
+                        </Button>
+                    </InputGroup>
                     <Button colorScheme='blue' mr={3} onClick={onClose}>
                         Close
                     </Button>
@@ -183,6 +255,8 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
                     </ModalFooter>
                 </ModalContent>
                 </Modal>
+
+
             </>
         )
     )
