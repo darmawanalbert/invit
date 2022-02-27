@@ -110,6 +110,10 @@ const lineScene = (scene, fillColor, strokeColor, tileSize ) => {
     t8.linewidth = 10;
     t8.stroke = `rgb(${strokeColor[0]}, ${strokeColor[1]}, ${strokeColor[2]})`;
 
+    // Text Area
+    const textPart = scene.makeRoundedRectangle(scene.width/2, scene.height/2, 0.7*scene.width, 0.8*scene.height, 180);
+    textPart.stroke = "#FFFFFF";
+
 }
 
 const particlesScene = (scene, fillColor, strokeColor, tileSize ) => {
