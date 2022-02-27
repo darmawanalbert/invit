@@ -7,7 +7,10 @@ const enforceColorContrast = (individual) => {
     let contrastRatio = colorContrast(backgroundColor, foregroundColor);
     while (contrastRatio < 4.5) {
         // Keep changing the foregroundColor until the contrastRatio >= 4.5
-        foregroundColor = [getRandomInt(256), getRandomInt(256), getRandomInt(256)];
+        individual[8] = getRandomInt(256);
+        individual[9] = getRandomInt(256);
+        individual[10] = getRandomInt(256);
+        foregroundColor = [individual[8], individual[9], individual[10]];
         contrastRatio = colorContrast(backgroundColor, foregroundColor);
     }
     return individual;
