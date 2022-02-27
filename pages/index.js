@@ -11,7 +11,8 @@ import {
   Stack,
   Textarea,
   Center,
-  Skeleton
+  Skeleton,
+  Image,
 } from '@chakra-ui/react'
 
 import React,
@@ -234,9 +235,9 @@ export default function Home({ apiUrl }) {
 
   return (
     <>
-    <Flex as="header" position="fixed" w="100%" bg={'#3a668c'} border={'1px solid #CCC'}>
+    <Flex as="header" position="fixed" w="100%" bg={'#FEF5DA'} border={'1px solid #CCC'}>
       <Box p='4' color={'white'} fontSize={'24px'}>
-        <b>Alternative Design</b>
+        <Image src="/align-logo.png" alt="Align Logo" height="48px"/>
       </Box>
       <Spacer />
       <Box p='4' >
