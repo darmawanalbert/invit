@@ -1,4 +1,5 @@
 import getRandomInt from './getRandomInt';
+import enforceColorContrast from './enforceColorContrast';
 
 const initialPopulation = (populationSizeParam) => {
     const populationSize = populationSizeParam || 20;
@@ -37,7 +38,10 @@ const initialPopulation = (populationSizeParam) => {
         individual.push(getRandomInt(256));
         individual.push(getRandomInt(256));
         individual.push(getRandomInt(37) + 12);
-        populationList.push(individual);
+
+        // Enforce Color Contrast
+        const finalIndividual = enforceColorContrast([...individual]);
+        populationList.push(finalIndividual);
     }
     return populationList;
 };
