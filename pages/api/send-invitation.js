@@ -5,25 +5,28 @@ export default async (req, res) => {
         
         var config = {
             method: 'post',
+            url: 'https://invit.vercel.app/api/store-pdf',
+            data: {
+                'sessionId' : req.body.sessionId,
+                'invitationBase64' : req.body.invitationBase64,
+            }
+        };
+        
+        const store_pdf = await axios(config)
+
+        var config2 = {
+            method: 'post',
             url: 'http://ec2-13-239-17-27.ap-southeast-2.compute.amazonaws.com:8089/align/twilio/invite',
             data: {
                 'num' : req.body.num,
                 'inviter' : req.body.inviter,
-                'invitation_url' : req.body.invitation_url
+                'invitation_url' : store_pdf.data.fileUrl
             }
         };
 
-        axios(config)
-            .then(function (response) {
-            console.log(response)
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({'message' : 'success'}));
-        })
-        .catch(function (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({"message":"ERROR!"}));
-        });
+        const sms_sender = await axios(config2)
+
+        res.send(JSON.stringify(sms_sender.data))
 
     } else {
         // 405: Method Not Allowed

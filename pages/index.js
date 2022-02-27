@@ -9,7 +9,6 @@ import {
   Input,
   Button,
   Stack,
-  Textarea,
   Center,
   Skeleton
 } from '@chakra-ui/react'
@@ -26,8 +25,8 @@ export default function Home({ apiUrl }) {
   const [sessionId, setSessionId] = useState('')
   const [invitationList, setInvitationList] = useState([])
 
-  const [partnerOne, setPartnerOne] = useState('Indo')
-  const [partnerTwo, setPartnerTwo] = useState('Mee')
+  const [partnerOne, setPartnerOne] = useState('Name')
+  const [partnerTwo, setPartnerTwo] = useState('Age')
   const [date, setDate] = useState('22/02/2022')
   const [place, setPlace] = useState('Melbourne')
   const [generateCanvasList, setGenerateCanvasList] = useState(handleGenerateCanvasList())
@@ -139,6 +138,7 @@ export default function Home({ apiUrl }) {
                 date={date}
                 place={place}
                 apiUrl={String(apiUrl)}
+                sessionId={sessionId}
               />
             </Center>
           </Box>
@@ -256,8 +256,8 @@ export default function Home({ apiUrl }) {
          <b>Detail Information</b>
         </Box>
         <Box padding={'10px'}>
-          <Input placeholder='Partner One' value={partnerOne} onChange={(e) => setPartnerOne(e.currentTarget.value) } />
-          <Input placeholder='Partner Two' value={partnerTwo} marginTop={'10px'} onChange={(e) => setPartnerTwo(e.currentTarget.value)} />
+          <Input placeholder='First Name' value={partnerOne} onChange={(e) => setPartnerOne(e.currentTarget.value) } />
+          <Input placeholder='Last Name' value={partnerTwo} marginTop={'10px'} onChange={(e) => setPartnerTwo(e.currentTarget.value)} />
           <Input type={'date'} placeholder='Date' value={date} marginTop={'10px'} onChange={(e) => setDate(e.currentTarget.value)} />
           <Input placeholder='Place' marginTop={'10px'} value={place} onChange={(e) => setPlace(e.currentTarget.value)}/>
         </Box>
