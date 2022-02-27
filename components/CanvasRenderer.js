@@ -20,7 +20,7 @@ import { jsPDF } from "jspdf";
 
 import axios from 'axios';
 
-const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTwo, date, place, apiUrl}) => {
+const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTwo, date, place, apiUrl, sessionId}) => {
     const canvasRef = useRef(null);
     const maxCanvasRef = useRef(null);
     const [image, setImage] = useState(null)
@@ -43,49 +43,53 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
 
     const handleShareClick = () => {
 
-        // setIsOpen(false)
+        setIsOpen(false)
 
-        width = width * 2
-        height = height * 2
+        setIsOpen(false)
 
         const ctx = maxCanvasRef.current.getContext('2d')
+        ctx.canvas.width = width * 2
+        ctx.canvas.height = height * 2
+        const scale = (ctx.canvas.width / minWidth)
+        const scaledTextSize = scale * textSize
+        const gap = 0
 
-        const scaledTextSize = (width / minWidth) * textSize
-        ctx.canvas.width  = width;
-        ctx.canvas.height = height
+        ctx.drawImage(image, 0,0, ctx.canvas.width, ctx.canvas.height)
         
-        ctx.drawImage(image, 0,0, width, height)
+        ctx.font = `${14 * scale}px Montserrat`
+        ctx.fillStyle = "#000000"
+        ctx.textAlign = "center"
+        ctx.fillText("JOIN", (ctx.canvas.width/2), 0.2 * (ctx.canvas.height))
+
+        ctx.font = `${20 * scale}px Roboto`
+        ctx.fillStyle = "#000000"
+        ctx.textAlign = "center"
+        ctx.fillText(partnerOne, (ctx.canvas.width/2), 0.3 * (ctx.canvas.height))
+
         ctx.font = `${scaledTextSize}px Caveat Brush`
         ctx.fillStyle = textColor
         ctx.textAlign = "center"
 
-        ctx.fillText(partnerOne, (width/2), 1 * scaledTextSize +  0.25 * (height))
-        ctx.fillText("&", (width/2), 2 * scaledTextSize +  0.25 * (height))
-        ctx.fillText(partnerTwo, (width/2), 3.0 * scaledTextSize +  0.25 * (height))
+        gap = 1.5 * scaledTextSize +  0.3 * (ctx.canvas.height)
+        ctx.fillText(partnerTwo, (ctx.canvas.width/2), gap)
 
-        ctx.font = `${10 * (width / minWidth)}px Roboto`
+        ctx.font = `${14 * scale}px Montserrat`
         ctx.fillStyle = "#000000"
         ctx.textAlign = "center"
-        
-        ctx.fillText("You are cordially invited to:", (width/2), 0.2 * (height))
-        
-        ctx.font = `${14 * (width / minWidth)}px Montserrat`
-        ctx.fillStyle = "#000000"
-        ctx.textAlign = "center"
-        ctx.fillText("Wonderful Wedding~~", (width/2), 3.0 * scaledTextSize +  0.35 * (height))
-        ctx.fillText(date, (width/2), 3.0 * scaledTextSize +  0.4 * (height))
-        ctx.fillText(place, (width/2), 3.0 * scaledTextSize +  0.45 * (height))
+        gap = gap + 1.5 * scaledTextSize
+        ctx.fillText("Birthday Party!!", (ctx.canvas.width/2), gap)
+        ctx.fillText(date, (ctx.canvas.width/2), gap + 0.05 * (ctx.canvas.height))
+        ctx.fillText(place, (ctx.canvas.width/2), gap + 0.1 * (ctx.canvas.height))
 
         const _canvas = document.getElementById('maxCanvas')
         const pdf = new jsPDF({ orientation: 'p', unit: 'px', format: [width, height] });
         pdf.addImage(_canvas, 'PNG', 0, 0, width, height);
 
-        // alert(pdf.output('datauristring'))
-
         const data = {
+            "sessionId": sessionId,
+            "invitationBase64": `${pdf.output('blob')}`,
             "num": phoneNumber,
-            "inviter": `${partnerOne} & ${partnerTwo}`,
-            "invitation_url": "https://invit.vercel.app"
+            "inviter": `${partnerOne}'s ${partnerTwo}`
         }
         axios.post(`${apiUrl}/send-invitation`, data).then(data => {
             alert(`Invitation has been sent to: ${phoneNumber}`)
@@ -95,40 +99,42 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
     }
 
     const handleDownloadClick = () => {
-        // const _canvas = document.getElementById('canvas')
        
         setIsOpen(false)
 
         const ctx = maxCanvasRef.current.getContext('2d')
+        ctx.canvas.width = width * 2
+        ctx.canvas.height = height * 2
+        const scale = (ctx.canvas.width / minWidth)
+        const scaledTextSize = scale * textSize
+        const gap = 0
 
-        width = width * 2
-        height = height * 2
-
-        const scaledTextSize = (width / minWidth) * textSize
-        ctx.canvas.width  = width;
-        ctx.canvas.height = height
+        ctx.drawImage(image, 0,0, ctx.canvas.width, ctx.canvas.height)
         
-        ctx.drawImage(image, 0,0, width, height)
+        ctx.font = `${14 * scale}px Montserrat`
+        ctx.fillStyle = "#000000"
+        ctx.textAlign = "center"
+        ctx.fillText("JOIN", (ctx.canvas.width/2), 0.2 * (ctx.canvas.height))
+
+        ctx.font = `${20 * scale}px Roboto`
+        ctx.fillStyle = "#000000"
+        ctx.textAlign = "center"
+        ctx.fillText(partnerOne, (ctx.canvas.width/2), 0.3 * (ctx.canvas.height))
+
         ctx.font = `${scaledTextSize}px Caveat Brush`
         ctx.fillStyle = textColor
         ctx.textAlign = "center"
 
-        ctx.fillText(partnerOne, (width/2), 1 * scaledTextSize +  0.25 * (height))
-        ctx.fillText("&", (width/2), 2 * scaledTextSize +  0.25 * (height))
-        ctx.fillText(partnerTwo, (width/2), 3.0 * scaledTextSize +  0.25 * (height))
+        gap = 1.5 * scaledTextSize +  0.3 * (ctx.canvas.height)
+        ctx.fillText(partnerTwo, (ctx.canvas.width/2), gap)
 
-        ctx.font = `${10 * (width / minWidth)}px Roboto`
+        ctx.font = `${14 * scale}px Montserrat`
         ctx.fillStyle = "#000000"
         ctx.textAlign = "center"
-        
-        ctx.fillText("You are cordially invited to:", (width/2), 0.2 * (height))
-        
-        ctx.font = `${14 * (width / minWidth)}px Montserrat`
-        ctx.fillStyle = "#000000"
-        ctx.textAlign = "center"
-        ctx.fillText("Wonderful Wedding~~", (width/2), 3.0 * scaledTextSize +  0.35 * (height))
-        ctx.fillText(date, (width/2), 3.0 * scaledTextSize +  0.4 * (height))
-        ctx.fillText(place, (width/2), 3.0 * scaledTextSize +  0.45 * (height))
+        gap = gap + 1.5 * scaledTextSize
+        ctx.fillText("Birthday Party!!", (ctx.canvas.width/2), gap)
+        ctx.fillText(date, (ctx.canvas.width/2), gap + 0.05 * (ctx.canvas.height))
+        ctx.fillText(place, (ctx.canvas.width/2), gap + 0.1 * (ctx.canvas.height))
 
         const _canvas = document.getElementById('maxCanvas')
         const pdf = new jsPDF({ orientation: 'p', unit: 'px', format: [width, height] });
@@ -146,28 +152,36 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
     useEffect(() => {
         if (image && canvasRef) {
             const ctx = canvasRef.current.getContext('2d')
-            const scaledTextSize = 1.0 * textSize
-            ctx.drawImage(image, 0,0, minWidth, minHeight)
+            const scale =  (ctx.canvas.width / minWidth)
+            const scaledTextSize = scale * textSize
+            const gap = 0
+
+            ctx.drawImage(image, 0,0, ctx.canvas.width, ctx.canvas.height)
+            
+            ctx.font = `${14 * scale}px Montserrat`
+            ctx.fillStyle = "#000000"
+            ctx.textAlign = "center"
+            ctx.fillText("JOIN", (ctx.canvas.width/2), 0.2 * (ctx.canvas.height))
+
+            ctx.font = `${20 * scale}px Roboto`
+            ctx.fillStyle = "#000000"
+            ctx.textAlign = "center"
+            ctx.fillText(partnerOne, (ctx.canvas.width/2), 0.3 * (ctx.canvas.height))
+
             ctx.font = `${scaledTextSize}px Caveat Brush`
             ctx.fillStyle = textColor
             ctx.textAlign = "center"
 
-            ctx.fillText(partnerOne, (minWidth/2), 1 * scaledTextSize +  0.25 * (minHeight))
-            ctx.fillText("&", (minWidth/2), 2 * scaledTextSize +  0.25 * (minHeight))
-            ctx.fillText(partnerTwo, (minWidth/2), 3.0 * scaledTextSize +  0.25 * (minHeight))
+            gap = 1.5 * scaledTextSize +  0.3 * (ctx.canvas.height)
+            ctx.fillText(partnerTwo, (ctx.canvas.width/2), gap)
 
-            ctx.font = `10px Roboto`
+            ctx.font = `${14 * scale}px Montserrat`
             ctx.fillStyle = "#000000"
             ctx.textAlign = "center"
-            
-            ctx.fillText("You are cordially invited to:", (minWidth/2), 0.2 * (minHeight))
-            
-            ctx.font = `14px Montserrat`
-            ctx.fillStyle = "#000000"
-            ctx.textAlign = "center"
-            ctx.fillText("Wonderful Wedding~~", (minWidth/2), 3.0 * scaledTextSize +  0.35 * (minHeight))
-            ctx.fillText(date, (minWidth/2), 3.0 * scaledTextSize +  0.4 * (minHeight))
-            ctx.fillText(place, (minWidth/2), 3.0 * scaledTextSize +  0.45 * (minHeight))
+            gap = gap + 1.5 * scaledTextSize
+            ctx.fillText("Birthday Party!!", (ctx.canvas.width/2), gap)
+            ctx.fillText(date, (ctx.canvas.width/2), gap + 0.05 * (ctx.canvas.height))
+            ctx.fillText(place, (ctx.canvas.width/2), gap + 0.1 * (ctx.canvas.height))
         }
       }, [image])
 
@@ -175,29 +189,36 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
         if (image && maxCanvasRef) {
             
             const ctx = maxCanvasRef.current.getContext('2d')
+            const scale = (ctx.canvas.width / minWidth)
+            const scaledTextSize = scale * textSize
+            const gap = 0
 
-            const scaledTextSize = (width / minWidth) * textSize
-            ctx.drawImage(image, 0,0, width, height)
+            ctx.drawImage(image, 0,0, ctx.canvas.width, ctx.canvas.height)
+            
+            ctx.font = `${14 * scale}px Montserrat`
+            ctx.fillStyle = "#000000"
+            ctx.textAlign = "center"
+            ctx.fillText("JOIN", (ctx.canvas.width/2), 0.2 * (ctx.canvas.height))
+
+            ctx.font = `${20 * scale}px Roboto`
+            ctx.fillStyle = "#000000"
+            ctx.textAlign = "center"
+            ctx.fillText(partnerOne, (ctx.canvas.width/2), 0.3 * (ctx.canvas.height))
+
             ctx.font = `${scaledTextSize}px Caveat Brush`
             ctx.fillStyle = textColor
             ctx.textAlign = "center"
 
-            ctx.fillText(partnerOne, (width/2), 1 * scaledTextSize +  0.25 * (height))
-            ctx.fillText("&", (width/2), 2 * scaledTextSize +  0.25 * (height))
-            ctx.fillText(partnerTwo, (width/2), 3.0 * scaledTextSize +  0.25 * (height))
+            gap = 1.5 * scaledTextSize +  0.3 * (ctx.canvas.height)
+            ctx.fillText(partnerTwo, (ctx.canvas.width/2), gap)
 
-            ctx.font = `${10 * (width / minWidth)}px Roboto`
+            ctx.font = `${14 * scale}px Montserrat`
             ctx.fillStyle = "#000000"
             ctx.textAlign = "center"
-            
-            ctx.fillText("You are cordially invited to:", (width/2), 0.2 * (height))
-            
-            ctx.font = `${14 * (width / minWidth)}px Montserrat`
-            ctx.fillStyle = "#000000"
-            ctx.textAlign = "center"
-            ctx.fillText("Wonderful Wedding~~", (width/2), 3.0 * scaledTextSize +  0.35 * (height))
-            ctx.fillText(date, (width/2), 3.0 * scaledTextSize +  0.4 * (height))
-            ctx.fillText(place, (width/2), 3.0 * scaledTextSize +  0.45 * (height))
+            gap = gap + 1.5 * scaledTextSize
+            ctx.fillText("Birthday Party!!", (ctx.canvas.width/2), gap)
+            ctx.fillText(date, (ctx.canvas.width/2), gap + 0.05 * (ctx.canvas.height))
+            ctx.fillText(place, (ctx.canvas.width/2), gap + 0.1 * (ctx.canvas.height))
 
         }
 
@@ -255,8 +276,6 @@ const CanvasRenderer = ({base64image, textColor, textSize, partnerOne, partnerTw
                     </ModalFooter>
                 </ModalContent>
                 </Modal>
-
-
             </>
         )
     )
