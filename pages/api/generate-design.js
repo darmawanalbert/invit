@@ -7,6 +7,7 @@ import {initializeCanvas, generateBackground} from '../../utilities/generateBack
 import rgbToHex from '../../utilities/rgbToHex';
 import { INTENT_COLOR_DARKER, INTENT_DEFAULT , INTENT_COLOR_LIGHTER, INTENT_PATTERN_DENSER, INTENT_PATTERN_SPARSER, INTENT_TEXT_SMALLER, INTENT_TEXT_BIGGER} from '../../utilities/intentConst';
 import { sortColorDarker , sortColorLighter, sortPatternDenser, sortPatternSparser, sortTextSmaller, sortTextBigger} from '../../utilities/intentSort';
+import enforceColorContrast from '../../utilities/enforceColorContrast';
 
 export default async (req, res) => {
     if (req.method === 'POST') {
@@ -75,11 +76,16 @@ export default async (req, res) => {
             // #2: GA operators (crossover and mutation)
             let newPopulationList = [];
             for (let i = 0; i < parentList.length; i+=2) {
+                // Crossover
                 const [newIndividualOne, newIndividualTwo] = crossover([...parentList[i]], [...parentList[i+1]], intent);
+                // Mutation
                 const mutatedIndividualOne = mutation([...newIndividualOne], intent);
                 const mutatedIndividualTwo = mutation([...newIndividualTwo], intent);
-                newPopulationList.push(mutatedIndividualOne);
-                newPopulationList.push(mutatedIndividualTwo);
+                // Design Heuristic #1: Color Contrast Ratio
+                const enforcedIndividualOne = enforceColorContrast([...mutatedIndividualOne]);
+                const enforcedIndividualTwo = enforceColorContrast([...mutatedIndividualTwo]);
+                newPopulationList.push(enforcedIndividualOne);
+                newPopulationList.push(enforcedIndividualTwo);
             }
             newPopulationList = newPopulationList.concat(parentList);
             // Save the new population to Firestore
